@@ -151,3 +151,35 @@ Spellcaster.prototype.spendMana = function(cost)  {
    * @param  {Spellcaster} target         The spell target to be inflicted.
    * @return {boolean}                    Whether the spell was successfully cast.
    */
+
+   Spellcaster.prototype.invoke = function(spell, target) {
+    //checks to see if its a spell if not then it returns and does not get executed.
+    if ( spell instanceof Spell === false) {
+      return false;
+    }
+    //checks to see if its a damage spell
+    if ( spell instanceof DamageSpell ) {
+      //if it is a damage spell then, check to see if if the target is an instance of a Spellcaster.
+      if ( target instanceof Spellcaster === true) {
+        //if pass check then check for run spend Mana function to see if there is enough mana and deduct cost of spell from mana.
+        if (this.spendMana(spell.cost)) {
+          target.inflictDamage(spell.damage);
+          return true;
+        }
+        return false;
+      }
+    }
+
+    if (spell instanceof Spell) {
+      if (this.spendMana(spell.cost)) {
+        return true;
+      }
+    } return false;
+
+
+
+   };
+var Tifa = new Spellcaster("Tifa", 9000, 100);
+var Cloud = new Spellcaster("Cloud", 9000, 100);
+var fart = new DamageSpell('Big Fart', 50, 'Toots own horn');
+Tifa.invoke(fart, Cloud);
